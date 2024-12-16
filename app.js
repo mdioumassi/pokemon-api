@@ -14,7 +14,7 @@ app
 .use(bodyParser.json())
 .use(cors());
 
-sequelize.initDb();
+//sequelize.initDb();
 
 // Ici, nous allons créer nos routes
 require('./src/routes/findAllPokemons')(app);
