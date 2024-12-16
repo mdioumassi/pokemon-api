@@ -16,7 +16,7 @@ sequelize.initDb();
 
 app.get('/', (req, res) => {
     res.json('Hello Heroku!');
-}
+});
 // Ici, nous allons créer nos routes
 require('./src/routes/findAllPokemons')(app);
 require('./src/routes/findPokemonByPk')(app);
