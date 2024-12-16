@@ -12,11 +12,8 @@ app
 .use(favicon(__dirname + '/favicon.ico'))
 .use(bodyParser.json())
 
-//sequelize.initDb();
+sequelize.initDb();
 
-app.get('/', (req, res) => {
-    res.json('Hello Heroku!');
-});
 // Ici, nous allons créer nos routes
 require('./src/routes/findAllPokemons')(app);
 require('./src/routes/findPokemonByPk')(app);
