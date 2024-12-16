@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 
 let sequelize;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV == 'production') {
    sequelize = new Sequelize('db20lftwyrh2mql3', 'roorguwub1k42ryi0mgt', 'adzh8pvr0yz66nre', {
         host: 'ao9moanwus0rjiex.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
         dialect: 'mariadb',
