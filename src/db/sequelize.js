@@ -1,58 +1,30 @@
-const { Sequelize, DataTypes } = require('sequelize')
-const PokemonModel = require('../models/pokemon')
-const userModel = require('../models/user')
-const pokemons = require('./mock-pokemon')
-const bcrypt = require('bcrypt')
+const db = require('../models');
+const gpservices = require('./mock-gpservices')
+const users = require('./mock-users')
+const services = require('./mock-services')
 
-let sequelize;
-
-if (process.env.NODE_ENV == 'production') {
-   sequelize = new Sequelize('db20lftwyrh2mql3', 'rguwub1k42ryi0mg', 'adzh8pvr0yz66nre', {
-        host: 'ao9moanwus0rjiex.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-        dialect: 'mariadb',
-        dialectOptions: {
-            timezone: 'Etc/GMT-2',
-        },
-        logging: true
-    })
-} else {
-    sequelize = new Sequelize('pokemon-db', 'root', '', {
-        host: 'localhost',
-        dialect: 'mariadb',
-        dialectOptions: {
-            timezone: 'Etc/GMT-2',
-        },
-        logging: false
-    })
-}
-
-const Pokemon = PokemonModel(sequelize, DataTypes);
-const User = userModel(sequelize, DataTypes);
+const gpController = require('../controllers/gp.controller')
+const userController = require('../controllers/user.controller')
+const serviceController = require('../controllers/service.controller')
 
 const initDb = () => {
-    return sequelize.sync().then(_ => {
-        pokemons.forEach(pokemon => {
-            Pokemon.create({
-                name: pokemon.name,
-                hp: pokemon.hp,
-                cp: pokemon.cp,
-                picture: pokemon.picture,
-                types: pokemon.types
-            })
-        })
-
-        bcrypt.hash('admin', 10).then(hash => {
-            User.create({
-                username: 'admin',
-                password: hash
-            })
-            .then(user => console.log(user.toJSON()))
-        })
-
+    return db.sequelize.sync({ force: true }).then(_ => {
+        //GP Controller
+        gpservices.forEach(gpService => {
+            gpController.createData(gpService);
+        });
+        //User Controller
+        users.forEach(user => {
+            userController.createData(user);
+        });
+        //Service Controller
+        services.forEach(service => {
+            serviceController.createData(service);
+        });
         console.log('La base de donnée a bien été initialisée !')
     })
 }
 
 module.exports = {
-    initDb, Pokemon, User
+    initDb
 }
